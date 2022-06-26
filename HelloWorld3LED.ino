@@ -20,5 +20,7 @@ void loop() {
     delay(1000);            // waits for a second
     digitalWrite(7, LOW);  // sets the digital pin 13 off
     delay(1000);            // waits for a second
+    
+    // Cam was here
   }
 }
