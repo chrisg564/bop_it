@@ -4,13 +4,18 @@
 #define PIN_DUNK_TRIG 9
 #define PIN_SPK 7
 
+// DUNK_ECHO_MAX_WAIT and LOOP_WAIT_MS should ideally be both prime and relatively prime to improve random number generation method
 #define PASS_IT_THRESHOLD 5
-#define DUNK_ECHO_MAX_WAIT_MS 4000
-#define LOOP_WAIT_MS 100
+#define DUNK_ECHO_MAX_WAIT_MS 4027
+#define LOOP_WAIT_MS 103
 #define DUNK_PROX_CM 4
 
 int pass_it_prev;
 int bounce_it_prev;
+
+int user_score = 0;
+unsigned current_time_interval_ms = 10000;
+unsigned total_attempts = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -21,8 +26,6 @@ void setup() {
 
   pass_it_prev = readPassIt();
   bounce_it_prev = readBounceIt();
-
-  tone(PIN_SPK, 440, 1);
 }
 
 int readPassIt() {
@@ -65,7 +68,7 @@ void loop() {
 
   pass_it_prev = pass_it_current;
   bounce_it_prev = bounce_it_current;
-  delay(100);
+  delay(LOOP_WAIT_MS);
 }
 
 inline void sendProxPulse() {
@@ -88,4 +91,12 @@ bool didBounceIt(int prev_value, int next_value) {
 
 bool didDunkIt(int duration_us) {
   return (0.017 * duration_us) < DUNK_PROX_CM;
+}
+
+inline unsigned randomInputChoice() {
+  return millis() % 3;
+}
+
+inline int decayTimeInterval(unsigned current_interval, unsigned total_attempts) {
+  return 4;
 }
